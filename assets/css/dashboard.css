@@ -1,0 +1,285 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  background-color: #000;
+  color: #fff;
+}
+
+.login-card {
+  background: rgba(0, 10, 40, 0.85);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 350px;
+  z-index: 2;
+}
+
+.text-glow {
+  color: #00ccff;
+  text-shadow: 0 0 5px #00ccff, 0 0 10px #00aaff;
+}
+
+.btn-glow {
+  background-color: #0099ff;
+  border: none;
+  font-weight: bold;
+  transition: 0.3s;
+  box-shadow: 0 0 10px #00ccff;
+}
+
+.btn-glow:hover {
+  background-color: #007acc;
+  box-shadow: 0 0 20px #00ccff;
+}
+
+canvas#fondo-particulas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  top: 0;
+  left: 0;
+}
+
+.bg-gradient-blue {
+  background: linear-gradient(135deg, #001F3F, #007BFF);
+  border-radius: 15px;
+}
+
+.card-title i {
+  margin-right: 8px;
+}
+
+#page-content-wrapper {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  #page-content-wrapper {
+    margin-left: 240px;
+  }
+}
+
+
+#sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 240px;
+  overflow-y: auto;
+}
+
+.resource-box {
+  background: rgba(0, 10, 40, 0.85);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  color: #00ccff;
+  text-align: center;
+  font-size: 1rem;
+  box-shadow: 0 0 10px rgba(0, 204, 255, 0.3);
+}
+
+.resource-box strong {
+  display: block;
+  font-size: 0.9rem;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.resource-box span {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .resource-box {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+  .resource-box span {
+    font-size: 1rem;
+  }
+}
+#modalMonitor .modal-content {
+  background: #0d1117;
+  color: white;
+  border-radius: 10px;
+  border: 1px solid #30363d;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+#graficaTráfico {
+  background: #161b22;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.welcome-message {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #00f0ff;
+  text-shadow: 0 0 6px #00eaff, 0 0 12px #007fbd;
+}
+.metric-box {
+  background: #0d1117;
+  border-radius: 12px;
+  padding: 15px;
+  color: #00ccff;
+  text-align: center;
+  font-size: 0.95rem;
+  box-shadow: 0 0 10px rgba(0, 204, 255, 0.3);
+}
+.metric-box span {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  #page-content-wrapper {
+    margin-left: 0 !important;
+    padding: 20px;
+  }
+
+  .metric-box {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .metric-box span {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;  /* Oculto inicialmente */
+    width: 240px;
+    height: 100%;
+    z-index: 1040;
+    background-color: #000;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+  }
+
+  #sidebar.show {
+    left: 0 !important; /* Mostrarse al activar */
+  }
+}
+
+
+#modalMonitor .modal-content {
+  background-color: #10141c !important;
+  color: #fff;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+#modalMonitor select {
+  background-color: #1f2a38 !important;
+  color: #fff;
+}
+
+#modalMonitor canvas {
+  background: #000;
+  border-radius: 8px;
+}
+@media screen and (max-width: 768px) {
+  .modal-content {
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+
+  .btn-close {
+    scale: 0.9;
+  }
+
+  #graficaTráfico {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .modal-body .btn {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  #tablaClientes thead {
+    display: none;
+  }
+
+  #tablaClientes tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.75rem;
+    background-color: white;
+    padding: 0.75rem;
+  }
+
+  #tablaClientes tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 0.4rem 0;
+    font-size: 0.95rem;
+  }
+
+  #tablaClientes tbody td:last-child {
+    border-bottom: none;
+  }
+
+  #tablaClientes tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #555;
+  }
+}
+@media screen and (max-width: 768px) {
+  #tablaClientes thead {
+    display: none;
+  }
+
+  #tablaClientes tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.75rem;
+    background-color: white;
+    padding: 0.75rem;
+  }
+
+  #tablaClientes tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 0.4rem 0;
+    font-size: 0.95rem;
+  }
+
+  #tablaClientes tbody td:last-child {
+    border-bottom: none;
+  }
+
+  #tablaClientes tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #555;
+  }
+}

@@ -1,0 +1,34 @@
+@media screen and (max-width: 768px) {
+  #tablaServicios thead {
+    display: none;
+  }
+
+  #tablaServicios tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: white;
+    padding: 0.75rem;
+  }
+
+  #tablaServicios tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 0.4rem 0;
+    font-size: 0.95rem;
+  }
+
+  #tablaServicios tbody td:last-child {
+    border-bottom: none;
+  }
+
+  #tablaServicios tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #555;
+  }
+}

@@ -1,0 +1,62 @@
+
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  background: #000;
+  color: #fff;
+}
+#epicOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 999999;
+}
+.epic-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  animation: fadeIn 2s ease-out;
+}
+.epic-message h1 {
+  font-size: 3rem;
+  margin: 10px 0;
+}
+.epic-message .highlight {
+  color: #ffcc00;
+  font-weight: bold;
+  animation: glow 1s ease-in-out infinite alternate;
+}
+.epic-message p {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  color: #aaa;
+}
+.epic-message button {
+  margin-top: 25px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  background: #ffcc00;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes glow {
+  from { text-shadow: 0 0 5px #fff; }
+  to { text-shadow: 0 0 20px #ffcc00, 0 0 30px #ffcc00; }
+}
+canvas#particles {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  background: #000;
+}

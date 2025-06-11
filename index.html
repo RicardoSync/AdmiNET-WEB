@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>AdmiNET | Sistema WISP/ISP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .card-info {
+      background: rgba(0, 10, 40, 0.85);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+      z-index: 1;
+      max-width: 600px;
+      width: 95%;
+    }
+
+    .btn-glow {
+      background-color: #00aaff;
+      color: #fff;
+      border: none;
+      padding: 10px 25px;
+      font-size: 18px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .btn-glow:hover {
+      background-color: #0088cc;
+    }
+
+    .tech-icons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .tech-icons img {
+      width: 45px;
+      height: 45px;
+      filter: drop-shadow(0 0 5px #00ccff);
+    }
+
+    #fondo-particulas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fondo-particulas"></canvas>
+
+  <div class="d-flex justify-content-center align-items-center vh-100 position-relative">
+    <div class="card-info text-center">
+      <img src="assets/img/anime.png" alt="Logo AdmiNET" width="100" class="mb-3">
+      <h2 class="text-glow">AdmiNET</h2>
+      <p>
+        AdmiNET es un software de gestión y control de clientes WISP e ISP.<br>
+        Disponible en la nube o en local (versión Java).<br>
+        Automatiza pagos, suspensiones, monitoreo y administración de MikroTik.
+      </p>
+      <a href="login.php" class="btn-glow">Ingresar al sistema</a>
+
+      <div class="tech-icons mt-4">
+        <img src="https://cdn.simpleicons.org/php/00ccff" title="PHP" alt="PHP">
+        <img src="https://cdn.simpleicons.org/html5/00ccff" title="HTML5" alt="HTML5">
+        <img src="https://cdn.simpleicons.org/bootstrap/00ccff" title="Bootstrap" alt="Bootstrap">
+        <img src="https://cdn.simpleicons.org/python/00ccff" title="Python" alt="Python">
+        <img src="https://cdn.simpleicons.org/ubuntu/00ccff" title="Ubuntu" alt="Ubuntu">
+        <img src="https://cdn.simpleicons.org/wireguard/00ccff" title="WireGuard" alt="WireGuard">
+      </div>
+    </div>
+  </div>
+
+  <!-- Partículas animadas -->
+  <script src="assets/js/particles.js"></script>
+</body>
+</html>

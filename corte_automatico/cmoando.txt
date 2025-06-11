@@ -1,0 +1,1 @@
+tail -f /opt/adminet/wispro/logs/cortes.log

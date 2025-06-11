@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  background-color: #000;
+  color: #fff;
+}
+
+.login-card {
+  background: rgba(0, 10, 40, 0.85);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 350px;
+  z-index: 2;
+}
+
+.text-glow {
+  color: #00aaff;
+  text-shadow: 0 0 5px #00ccff, 0 0 15px #0099ff;
+}
+
+.btn-glow {
+  background-color: #0099ff;
+  border: none;
+  font-weight: bold;
+  transition: 0.3s;
+  box-shadow: 0 0 10px #00ccff;
+}
+
+.btn-glow:hover {
+  background-color: #007acc;
+  box-shadow: 0 0 20px #00ccff;
+}
+
+canvas#fondo-particulas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  top: 0;
+  left: 0;
+}
+
+.bg-gradient-blue {
+  background: linear-gradient(135deg, #001F3F, #007BFF);
+  border-radius: 15px;
+}
+
+.text-glow {
+  color: #00ccff;
+  text-shadow: 0 0 5px #00ccff, 0 0 10px #00aaff;
+}
+
+.card-title i {
+  margin-right: 8px;
+}

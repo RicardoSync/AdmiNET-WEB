@@ -1,0 +1,77 @@
+body {
+  background: url('/assets/img/cumple_bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background-color: #f39c12;
+  top: -10px;
+  z-index: 9999;
+  animation: caer 4s linear infinite;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+@keyframes caer {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(100vh) rotate(360deg); }
+}
+
+/* Mensaje épico */
+#popupCumple {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 1s ease-out;
+}
+
+.caja-cumple {
+  background: #fff8e1;
+  color: #b85e00;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 0 25px #f39c12;
+  max-width: 400px;
+  animation: pop 1s ease-out;
+}
+
+.caja-cumple h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.caja-cumple p {
+  font-size: 1.1rem;
+}
+
+.caja-cumple button {
+  background: #f39c12;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  font-weight: bold;
+  border-radius: 8px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+@keyframes pop {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { background: rgba(0,0,0,0); }
+  to { background: rgba(0,0,0,0.85); }
+}

@@ -1,0 +1,54 @@
+body {
+  background: url('/assets/img/halloween_bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+}
+
+.metric-box {
+  border-top-color: orange !important;
+  box-shadow: 0 0 10px rgba(255, 165, 0, 0.4);
+}
+
+h2.text-primary::after {
+  content: " 🎃 ¡Feliz Halloween!";
+  color: orange;
+}
+
+#popupHalloween {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-halloween {
+  background: #222;
+  padding: 25px;
+  border-radius: 15px;
+  color: orange;
+  text-align: center;
+  animation: aparecer 1s ease-out;
+  box-shadow: 0 0 20px orange;
+}
+
+.popup-halloween h4 {
+  font-size: 1.5rem;
+}
+
+.popup-halloween button {
+  background: orange;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@keyframes aparecer {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

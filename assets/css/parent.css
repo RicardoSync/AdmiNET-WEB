@@ -1,0 +1,34 @@
+@media screen and (max-width: 768px) {
+  table thead {
+    display: none;
+  }
+
+  table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 1rem;
+  }
+
+  table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+
+  table tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #333;
+  }
+
+  table tbody td:last-child {
+    border-bottom: none;
+  }
+}

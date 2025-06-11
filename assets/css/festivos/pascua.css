@@ -1,0 +1,14 @@
+body {
+  background: url('/assets/img/pascua_bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.metric-box {
+  border-top-color: #ff69b4 !important;
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+}
+
+h2.text-primary::after {
+  content: " 🐣 ¡Felices Pascuas!";
+  color: #ff69b4;
+}

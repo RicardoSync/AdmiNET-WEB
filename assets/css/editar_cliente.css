@@ -1,0 +1,82 @@
+body {
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-header {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  font-size: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header .avatar {
+  background-color: #2563eb;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #1e40af;
+}
+
+.btn-secondary {
+  background-color: #6b7280;
+  border: none;
+}
+
+input.form-control,
+select.form-select,
+textarea.form-control {
+  border-radius: 8px;
+  box-shadow: none;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+}
+
+.card-body {
+  background-color: #ffffff;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1e3a8a;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #dbeafe;
+  padding-bottom: 5px;
+}

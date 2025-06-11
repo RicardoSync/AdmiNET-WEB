@@ -1,0 +1,15 @@
+body {
+  background: url('/assets/img/diademuertos_bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+}
+
+.metric-box {
+  border-top-color: #a000c0 !important;
+  box-shadow: 0 0 10px rgba(160, 0, 192, 0.4);
+}
+
+h2.text-primary::after {
+  content: " 💀 Día de Muertos";
+  color: #f0a;
+}
