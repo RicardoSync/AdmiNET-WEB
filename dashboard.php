@@ -29,6 +29,14 @@ $planes = $conn->query("SELECT COUNT(*) FROM paquetes")->fetchColumn();
 $usuariosInactivos = $conn->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
 $equipos = $conn->query("SELECT COUNT(*) FROM equipos")->fetchColumn();
 $zonas = $conn->query("SELECT COUNT(*) FROM antenasap")->fetchColumn();
+$logsMikrotik = $conn->query("
+  SELECT lm.fecha_hora, lm.tipo, lm.mensaje, cm.nombre AS router
+  FROM logs_mikrotiks lm
+  LEFT JOIN credenciales_microtik cm ON cm.id = lm.id_mikrotik
+  ORDER BY lm.fecha_hora DESC
+  LIMIT 20
+")->fetchAll(PDO::FETCH_ASSOC);
+
 
 // ← Agrega aquí la nueva consulta
 $consumoQuery = $conn->query("
@@ -235,8 +243,35 @@ for ($i = 1; $i <= 12; $i++) {
       <canvas id="graficaInstalaciones" height="200"></canvas>
     </div>
 
+  <div class="section-title">📜 Últimos Logs de MikroTik</div>
+  <div class="chart-container">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover table-sm">
+        <thead class="table-light">
+          <tr>
+            <th>Fecha</th>
+            <th>Router</th>
+            <th>Tipo</th>
+            <th>Mensaje</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($logsMikrotik as $log): ?>
+          <tr>
+            <td><?= htmlspecialchars($log['fecha_hora']) ?></td>
+            <td><?= htmlspecialchars($log['router'] ?? 'N/D') ?></td>
+            <td><span class="badge bg-secondary"><?= htmlspecialchars($log['tipo']) ?></span></td>
+            <td><?= htmlspecialchars($log['mensaje']) ?></td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+    
   </div>
 
+
+  </div>
 
 </div>
 

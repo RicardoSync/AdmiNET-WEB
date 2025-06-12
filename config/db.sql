@@ -419,6 +419,15 @@ CREATE TABLE consumo_internet (
   total BIGINT NOT NULL
 );
 
+CREATE TABLE logs_mikrotiks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_mikrotik INT NOT NULL,
+    fecha_hora DATETIME,
+    tipo VARCHAR(50),
+    topico VARCHAR(100),
+    mensaje TEXT
+);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

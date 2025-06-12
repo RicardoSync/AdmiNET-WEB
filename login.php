@@ -111,7 +111,7 @@ if (!isset($_SESSION['usuario']) && isset($_COOKIE['usuario']) && isset($_COOKIE
 </div>
 
 <div class="position-absolute bottom-0 w-100 text-center text-secondary pb-2 small z-1">
-  &copy; <?= date('Y') ?> Software Escobedo. Desarrollado por Ricardo Escobedo.
+  &copy; <?= date('Y') ?> Software Escobedo. Desarrollado por Ricardo Escobedo. Ahora potenciado con IA
 </div>
 
 <script src="assets/js/particles.js"></script>

@@ -2,12 +2,15 @@
 session_start();
 
 // Conexión a base de datos central
+require_once __DIR__ . '/includes/config_global.php';
+
 try {
-    $connGlobal = new PDO("mysql:host=softwarescobedo.com.mx;dbname=adminet_global;charset=utf8mb4", "adminet", "MinuzaFea265/");
+    $connGlobal = new PDO("mysql:host=" . DB_HOST_GLOBAL . ";dbname=" . DB_NAME_GLOBAL . ";charset=utf8mb4", DB_USER_GLOBAL, DB_PASS_GLOBAL);
     $connGlobal->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch(PDOException $e) {
     die("Error de conexión global: " . $e->getMessage());
 }
+
 
 // Captura de datos del formulario
 $usuario = $_POST['usuario'];
