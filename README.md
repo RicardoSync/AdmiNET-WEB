@@ -1,6 +1,7 @@
 # AdmiNET Web (OpenSource)
 
 **AdmiNET Web** es un sistema de gestión y control para WISP e ISP desarrollado con tecnologías web y pensado para correr en entornos locales o en la nube. Este proyecto ha sido liberado como software de código abierto con el objetivo de que la comunidad WISP/ISP pueda mejorar, expandir y adaptar el sistema a sus necesidades reales. 🚀
+![clientes](https://github.com/user-attachments/assets/48c01da9-f29b-49a1-9bd0-4a9f9c7aba55)
 
 ## Tecnologías Utilizadas
 
