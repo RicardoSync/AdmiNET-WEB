@@ -24,6 +24,7 @@
 - Tener permisos de lectura/escritura adecuados en la carpeta `evidencia/` (necesario para el módulo de tickets).
 - Reemplazar las credenciales de conexión (`user`, `password`, `host`, `port`, `database`) en el archivo de configuración según tu sistema local o VPS.
 - Puerto **22** habilitado en MikroTik para conexión por **SSH**.
+![zzzz](https://github.com/user-attachments/assets/209ef4aa-26f5-4106-9fa3-c0f418f09d43)
 
 ## Recomendaciones
 
