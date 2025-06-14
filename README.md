@@ -61,5 +61,11 @@ Este sistema fue desarrollado por **Software Escobedo / Richard García Escobedo
 > **Cualquier uso o distribución debe conservar estos créditos.**
 
 ---
+![Captura desde 2025-06-01 01-50-53](https://github.com/user-attachments/assets/b30492ac-16e1-4c03-8b9f-2ee8ee1e045d)
+![Captura desde 2025-06-01 01-54-47](https://github.com/user-attachments/assets/44313227-cc4b-466b-a6e3-da80868af965)
+![Captura desde 2025-06-01 01-54-54](https://github.com/user-attachments/assets/cd457fb1-28f4-4991-9b03-01c13330bc31)
+![dashboard](https://github.com/user-attachments/assets/31847147-0b5d-4676-b78e-ffa80e2a39ac)
+![mapa](https://github.com/user-attachments/assets/6a4f4a0d-dd97-4239-a7b9-13a2d78a9bbe)
+![Captura desde 2025-06-01 01-51-41](https://github.com/user-attachments/assets/542fe28d-717d-4a70-8536-107b27c19b62)
 
 ¡Contribuye, mejora y transforma el futuro de los WISP con AdmiNET Web! 🌐🛠️
