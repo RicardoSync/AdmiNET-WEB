@@ -96,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <form method="POST">
+        <label for="nombre" class="form-label">Establece las credenciales del MikroTik, recuerda tener activo el puerto 22 SSH</label>
       <div class="mb-3">
         <label for="nombre" class="form-label">Nombre *</label>
         <input type="text" name="nombre" id="nombre" class="form-control text-dark" required>
@@ -118,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <div class="mb-3">
         <label for="port" class="form-label">Puerto</label>
-        <input type="text" name="port" id="port" class="form-control text-dark" placeholder="8728">
+        <input type="text" name="port" id="port" class="form-control text-dark" placeholder="22">
       </div>
 
       <button type="submit" class="btn btn-primary">

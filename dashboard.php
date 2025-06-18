@@ -29,13 +29,6 @@ $planes = $conn->query("SELECT COUNT(*) FROM paquetes")->fetchColumn();
 $usuariosInactivos = $conn->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
 $equipos = $conn->query("SELECT COUNT(*) FROM equipos")->fetchColumn();
 $zonas = $conn->query("SELECT COUNT(*) FROM antenasap")->fetchColumn();
-$logsMikrotik = $conn->query("
-  SELECT lm.fecha_hora, lm.tipo, lm.mensaje, cm.nombre AS router
-  FROM logs_mikrotiks lm
-  LEFT JOIN credenciales_microtik cm ON cm.id = lm.id_mikrotik
-  ORDER BY lm.fecha_hora DESC
-  LIMIT 20
-")->fetchAll(PDO::FETCH_ASSOC);
 
 
 // ← Agrega aquí la nueva consulta

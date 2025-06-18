@@ -231,6 +231,27 @@ $mikrotiks = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </div>
 </div>
 
+<div class="modal fade" id="modalRecursos" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
+    <div class="modal-content bg-dark text-white shadow-lg border-0 rounded-4 p-2 p-md-4">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold text-warning">
+          <i class="bi bi-cpu me-2"></i> Uso de CPU y Memoria
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body pt-2">
+        <div class="bg-black rounded p-2 p-md-3">
+          <div style="height: 220px;">
+            <canvas id="graficoRecursos"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -259,7 +280,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
 </script>
 
 <script>
@@ -493,6 +513,105 @@ function aplicarFirewall(id) {
   .then(res => res.text())
   .then(resp => alert(resp))
   .catch(err => alert("Error de red o conexión: " + err));
+}
+</script>
+
+<script>
+let graficoRecursos = new Chart(document.getElementById('graficoRecursos'), {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [
+      {
+        label: 'CPU (%)',
+        data: [],
+        borderColor: 'orange',
+        backgroundColor: 'rgba(255,165,0,0.2)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 2,
+        borderWidth: 2
+      },
+      {
+        label: 'Memoria (%)',
+        data: [],
+        borderColor: 'aqua',
+        backgroundColor: 'rgba(0,255,255,0.2)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 2,
+        borderWidth: 2
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: {
+      duration: 400
+    },
+    plugins: {
+      legend: {
+        labels: { color: '#fff' }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: '#ccc' }
+      },
+      y: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          color: '#ccc',
+          callback: value => value + '%'
+        }
+      }
+    }
+  }
+});
+
+let intervaloRecursos = null;
+
+function abrirMonitorRecursos(id) {
+  const modal = new bootstrap.Modal(document.getElementById('modalRecursos'));
+  graficoRecursos.data.labels = [];
+  graficoRecursos.data.datasets[0].data = [];
+  graficoRecursos.data.datasets[1].data = [];
+  graficoRecursos.update();
+
+  if (intervaloRecursos) clearInterval(intervaloRecursos);
+
+  intervaloRecursos = setInterval(() => {
+    fetch(`api/recursos_mikrotik.php?id=${id}`)
+      .then(res => res.json())
+      .then(data => {
+        const hora = new Date().toLocaleTimeString();
+        const cpu = parseFloat(data.cpu) || 0;
+        const ram = parseFloat(data.mem) || 0;
+
+        graficoRecursos.data.labels.push(hora);
+        graficoRecursos.data.datasets[0].data.push(cpu);
+        graficoRecursos.data.datasets[1].data.push(ram);
+
+        if (graficoRecursos.data.labels.length > 20) {
+          graficoRecursos.data.labels.shift();
+          graficoRecursos.data.datasets[0].data.shift();
+          graficoRecursos.data.datasets[1].data.shift();
+        }
+
+        graficoRecursos.update();
+      });
+  }, 4000);
+
+  modal.show();
+
+  document.getElementById('modalRecursos').addEventListener('hidden.bs.modal', () => {
+    if (intervaloRecursos) {
+      clearInterval(intervaloRecursos);
+      intervaloRecursos = null;
+    }
+  });
 }
 </script>
 
