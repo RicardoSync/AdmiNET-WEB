@@ -55,37 +55,6 @@ El módulo **ANTCL** permite visualizar en tiempo real los clientes activos de t
    - Hace `ping` a cada IP.
    - Retorna un arreglo JSON con el estado de cada cliente.
 
-2. PHP recibe el JSON, lo interpreta y lo muestra con íconos, colores y botones para **suspender o activar** al cliente desde el mismo panel.
-
----
-
-## 📋 Ejemplo de datos esperados
-
-Suponiendo esta tabla `clientes`:
-
-| id | nombre         | ip_cliente     |
-|----|----------------|----------------|
-| 1  | Juan Pérez     | 192.168.10.10  |
-| 2  | María Gómez    | 192.168.10.20  |
-
-El script devolverá algo como:
-
-```json
-[
-  {
-    "id": 1,
-    "ip": "192.168.10.10",
-    "nombre": "Juan Pérez",
-    "estado": "Activo"
-  },
-  {
-    "id": 2,
-    "ip": "192.168.10.20",
-    "nombre": "María Gómez",
-    "estado": "Inactivo"
-  }
-]
-
 
 ## Licencia y Uso
 
@@ -117,3 +86,34 @@ Este sistema fue desarrollado por **Software Escobedo / Richard García Escobedo
 ![Captura desde 2025-06-01 01-51-41](https://github.com/user-attachments/assets/542fe28d-717d-4a70-8536-107b27c19b62)
 
 ¡Contribuye, mejora y transforma el futuro de los WISP con AdmiNET Web! 🌐🛠️
+
+
+2. PHP recibe el JSON, lo interpreta y lo muestra con íconos, colores y botones para **suspender o activar** al cliente desde el mismo panel.
+---
+
+## 📋 Ejemplo de datos esperados
+
+Suponiendo esta tabla `clientes`:
+
+| id | nombre         | ip_cliente     |
+|----|----------------|----------------|
+| 1  | Juan Pérez     | 192.168.10.10  |
+| 2  | María Gómez    | 192.168.10.20  |
+
+El script devolverá algo como:
+
+```json
+[
+  {
+    "id": 1,
+    "ip": "192.168.10.10",
+    "nombre": "Juan Pérez",
+    "estado": "Activo"
+  },
+  {
+    "id": 2,
+    "ip": "192.168.10.20",
+    "nombre": "María Gómez",
+    "estado": "Inactivo"
+  }
+]
