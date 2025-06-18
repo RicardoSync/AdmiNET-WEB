@@ -41,6 +41,52 @@ Incluye el script `adminet_cortes_system.py` que automatiza los cortes y activac
 - Requiere tener creadas ambas bases de datos: `adminet_global` y `adminet_test`
 - Este script se puede configurar como **servicio de Windows o Linux**
 
+# 📡 Módulo ANTCL - Monitor de Clientes Activos (AdmiNET)
+
+El módulo **ANTCL** permite visualizar en tiempo real los clientes activos de tu red (WISP/ISP) mediante `ping`. Este script en Python se conecta a tu base de datos `clientes`, obtiene las IP registradas y determina si están **en línea (Activo)** o **fuera de línea (Inactivo)**, retornando el resultado en formato JSON para ser mostrado gráficamente en el panel PHP de AdmiNET.
+
+---
+
+## 🧠 ¿Cómo funciona?
+
+1. Se ejecuta `monitor_antenas.py`, que:
+   - Se conecta a la base de datos `clientes` (configurada por ti).
+   - Obtiene las IPs válidas (`ip_cliente`).
+   - Hace `ping` a cada IP.
+   - Retorna un arreglo JSON con el estado de cada cliente.
+
+2. PHP recibe el JSON, lo interpreta y lo muestra con íconos, colores y botones para **suspender o activar** al cliente desde el mismo panel.
+
+---
+
+## 📋 Ejemplo de datos esperados
+
+Suponiendo esta tabla `clientes`:
+
+| id | nombre         | ip_cliente     |
+|----|----------------|----------------|
+| 1  | Juan Pérez     | 192.168.10.10  |
+| 2  | María Gómez    | 192.168.10.20  |
+
+El script devolverá algo como:
+
+```json
+[
+  {
+    "id": 1,
+    "ip": "192.168.10.10",
+    "nombre": "Juan Pérez",
+    "estado": "Activo"
+  },
+  {
+    "id": 2,
+    "ip": "192.168.10.20",
+    "nombre": "María Gómez",
+    "estado": "Inactivo"
+  }
+]
+
+
 ## Licencia y Uso
 
 > ⚠️ **IMPORTANTE:**  
