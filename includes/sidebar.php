@@ -36,7 +36,7 @@
           <li class="nav-item"><a href="/ded/clientes.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'clientes.php' ? 'active' : '' ?>"><i class="bi bi-circle me-2"></i>Ver Clientes</a></li>
           <li class="nav-item"><a href="/ded/clientes_suspendidos.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'clientes_suspendidos.php' ? 'active' : '' ?>"><i class="bi bi-circle me-2"></i>Suspendidos</a></li>
           <li class="nav-item"><a href="/ded/maps.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'maps.php' ? 'active' : '' ?>"><i class="bi bi-circle me-2"></i>Mapa</a></li>
-          <li class="nav-item"><a href="/ded/scripts/monitor.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'monitor.php' ? 'active' : '' ?>"><i class="bi bi-circle me-2"></i>ANTCL</a></li>
+          <li class="nav-item"><a href="/ded/scripts/monitor.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'monitor.php' ? 'active' : '' ?>"><i class="bi bi-circle me-2"></i>Radar</a></li>
         </ul>
       </div>
     </li>

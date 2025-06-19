@@ -4,14 +4,10 @@ if (!isset($_SESSION['usuario'])) {
   header("Location: login.php");
   exit;
 }
-require_once '../includes/db.php'; 
+require_once '../includes/db.php';
 require_once '../includes/estilo_festivo.php';
 $estiloFestivo = obtenerEstiloFestivo();
-$python = __DIR__ . "/.venv/bin/python3";
-$script = __DIR__ . "/monitor_antenas.py";
-$salida = shell_exec("$python $script 2>&1");
-
-$datos = json_decode($salida, true);
+$basedatos = $conn->query("SELECT DATABASE()")->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -26,11 +22,27 @@ $datos = json_decode($salida, true);
   <?php if ($estiloFestivo): ?>
     <link rel="stylesheet" href="../assets/css/festivos/<?= $estiloFestivo ?>.css">
   <?php endif; ?>
+
+  <!-- Importar reproductor .lottie -->
+  <script type="module" src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"></script>
+
   <style>
     body {
       background: linear-gradient(to bottom right, #e9f1ff, #ffffff);
       font-family: 'Segoe UI', sans-serif;
       color: #333;
+    }
+
+    #loadingOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(255, 255, 255, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
     }
 
     .metric-box {
@@ -109,82 +121,73 @@ $datos = json_decode($salida, true);
   </style>
 </head>
 <body>
+
+<div id="loadingOverlay">
+  <dotlottie-player
+    src="https://lottie.host/4e2a6cfe-cea5-40b0-9150-c923c7a18ffb/AFyo2dBiIY.lottie"
+    background="transparent"
+    speed="1"
+    style="width: 200px; height: 200px;"
+    loop
+    autoplay>
+  </dotlottie-player>
+  <p class="mt-3 fw-bold text-primary fs-5">Revisando clientes en sistema<br>Por favor espera</p>
+</div>
+
 <div class="d-flex" id="wrapper">
   <?php include '../includes/sidebar.php'; ?>
   <div id="page-content-wrapper" class="w-100 p-4">
     <div class="titulo-seccion">📡 Monitor de Clientes</div>
-
-    <div class="row g-4">
-      <?php if ($datos): ?>
-        <?php foreach ($datos as $fila): ?>
-          <div class="col-md-3">
-            <div class="metric-box <?= $fila['estado'] === 'Activo' ? 'activo' : 'inactivo' ?>" style="border-top-color: <?= $fila['estado'] === 'Activo' ? '#198754' : '#dc3545' ?>;">
-              <img src="../assets/img/<?= $fila['estado'] === 'Activo' ? 'antena_activa.png' : 'antena_inactiva.png' ?>" alt="Antena" class="antena-img">
-              
-              <h5 class="mb-1"><?= htmlspecialchars($fila['ip']) ?></h5>
-              <div class="fw-bold mb-1 text-primary"><?= htmlspecialchars($fila['nombre']) ?></div>
-              
-              <span class="<?= $fila['estado'] === 'Activo' ? 'estado-activo' : 'estado-inactivo' ?>">
-                <?= $fila['estado'] ?>
-              </span>
-
-              <div class="d-flex justify-content-center gap-2 mt-3">
-                <button class="btn btn-outline-danger btn-sm btn-suspender" data-id="<?= $fila['id'] ?>">
-                  <i class="bi bi-slash-circle"></i> Suspender
-                </button>
-                <button class="btn btn-outline-success btn-sm btn-activar" data-id="<?= $fila['id'] ?>">
-                  <i class="bi bi-check-circle"></i> Activar
-                </button>
-              </div>
-            </div>
-          </div>
-        <?php endforeach; ?>
-      <?php else: ?>
-        <div class="col-12">
-          <div class="alert alert-warning">
-            No se pudo obtener información de las antenas.<br>
-            <pre><?= htmlspecialchars($salida) ?></pre>
-          </div>
-        </div>
-      <?php endif; ?>
+    <div class="row g-4" id="contenedorClientes">
+      <!-- Se carga dinámicamente -->
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-document.addEventListener('click', e => {
-  const suspender = e.target.closest('.btn-suspender');
-  const activar = e.target.closest('.btn-activar');
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch("monitor_datos.php")
+      .then(res => res.json())
+      .then(data => {
+        const contenedor = document.getElementById('contenedorClientes');
+        data.forEach(cliente => {
+          const card = `
+            <div class="col-md-3">
+              <div class="metric-box ${cliente.estado === 'Activo' ? 'activo' : 'inactivo'}"
+                style="border-top-color: ${cliente.estado === 'Activo' ? '#198754' : '#dc3545'};">
+                
+                <img src="../assets/img/${cliente.estado === 'Activo' ? 'antena_activa.png' : 'antena_inactiva.png'}" alt="Antena" class="antena-img">
+                
+                <h5 class="mb-1">${cliente.ip}</h5>
+                <div class="fw-bold mb-1 text-primary">${cliente.nombre}</div>
 
-  if (suspender) {
-    const id = suspender.dataset.id;
-    fetch("/ded/api/suspender_cliente.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: "id=" + id
-    })
-    .then(res => res.text())
-    .then(msg => {
-      alert(msg);
-      location.reload();
-    });
-  }
+                <span class="${cliente.estado === 'Activo' ? 'estado-activo' : 'estado-inactivo'}">
+                  ${cliente.estado}
+                </span>
 
-  if (activar) {
-    const id = activar.dataset.id;
-    fetch("/ded/api/activar_cliente.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: "id=" + id
-    })
-    .then(res => res.text())
-    .then(msg => {
-      alert(msg);
-      location.reload();
-    });
-  }
-});
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                  <button class="btn btn-outline-danger btn-sm btn-suspender" data-id="${cliente.id}">
+                    <i class="bi bi-slash-circle"></i> Suspender
+                  </button>
+                  <button class="btn btn-outline-success btn-sm btn-activar" data-id="${cliente.id}">
+                    <i class="bi bi-check-circle"></i> Activar
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          contenedor.innerHTML += card;
+        });
+        document.getElementById("loadingOverlay").style.display = "none";
+      })
+      .catch(err => {
+        document.getElementById("contenedorClientes").innerHTML = `<div class="alert alert-danger">Error: ${err}</div>`;
+        document.getElementById("loadingOverlay").style.display = "none";
+      });
+  });
 </script>
+
 </body>
 </html>
