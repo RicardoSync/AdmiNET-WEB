@@ -160,6 +160,11 @@ $mikrotiks = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <button class="btn btn-sm btn-dark" onclick="aplicarFirewall(<?= $m['id'] ?>)">
                     <i class="bi bi-shield-lock"></i> Firewall
                   </button>
+
+                  <button class="btn btn-sm btn-dark" onclick="abrirTerminal(<?= $m['id'] ?>)">
+                    <i class="bi bi-terminal"></i> Terminal
+                  </button>
+
                 </div>
               </td>
               <td data-label="Estado">
@@ -203,8 +208,6 @@ $mikrotiks = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 </div>
-
-
 
 <div class="modal fade" id="modalMonitor" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
@@ -251,7 +254,24 @@ $mikrotiks = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </div>
 </div>
 
-
+<div class="modal fade" id="modalTerminal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content bg-dark text-white rounded-4 p-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title"><i class="bi bi-terminal me-2"></i> Terminal MikroTik</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group mb-3">
+          <label for="comandoInput">Comando:</label>
+          <input type="text" id="comandoInput" class="form-control bg-black text-white border-0" placeholder="/interface print">
+        </div>
+        <button class="btn btn-success mb-3" onclick="ejecutarComando()">Ejecutar</button>
+        <pre id="salidaTerminal" class="bg-black p-3 text-success rounded" style="max-height: 400px; overflow-y: auto;"></pre>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -280,6 +300,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+let terminalId = null;
+function abrirTerminal(id) {
+  terminalId = id;
+  document.getElementById('comandoInput').value = '';
+  document.getElementById('salidaTerminal').textContent = '';
+  const modal = new bootstrap.Modal(document.getElementById('modalTerminal'));
+  modal.show();
+}
+
+function ejecutarComando() {
+  const comando = document.getElementById('comandoInput').value;
+  if (!comando) return alert("Escribe un comando MikroTik");
+
+  fetch('api/ejecutar_comando_terminal.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `id=${terminalId}&comando=${encodeURIComponent(comando)}`
+  })
+  .then(res => res.text())
+  .then(salida => {
+    document.getElementById('salidaTerminal').textContent = salida;
+  })
+  .catch(err => {
+    document.getElementById('salidaTerminal').textContent = 'Error de conexión o ejecución: ' + err;
+  });
+}
+
+
 </script>
 
 <script>
