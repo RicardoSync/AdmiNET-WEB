@@ -256,24 +256,51 @@ $mikrotiks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="modal fade" id="modalTerminal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
-    <div class="modal-content bg-dark text-white rounded-4 p-3">
-      <div class="modal-header border-0">
-        <h5 class="modal-title"><i class="bi bi-terminal me-2"></i> Terminal MikroTik</h5>
+    <div class="modal-content bg-black text-white shadow-lg border-0 rounded-4">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title text-success"><i class="bi bi-terminal me-2"></i> Terminal MikroTik</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body">
-        <div class="form-group mb-3">
-          <label for="comandoInput">Comando:</label>
-          <input type="text" id="comandoInput" class="form-control bg-black text-white border-0" placeholder="/interface print">
+
+      <div class="modal-body py-3">
+
+        <!-- Animación de carga -->
+        <div id="loadingTerminalOverlay" style="display: none;" class="text-center mt-3 mb-4">
+          <dotlottie-player
+            src="https://lottie.host/9acce7c1-2005-4cb4-88cd-dccaffdd4d55/UNDnOpk2q3.lottie"
+            background="transparent"
+            speed="1"
+            style="width: 120px; height: 120px;"
+            loop autoplay>
+          </dotlottie-player>
+          <p class="fw-semibold text-info mb-0">Ejecutando comando en MikroTik...</p>
         </div>
-        <button class="btn btn-success mb-3" onclick="ejecutarComando()">Ejecutar</button>
-        <pre id="salidaTerminal" class="bg-black p-3 text-success rounded" style="max-height: 400px; overflow-y: auto;"></pre>
+
+        <!-- Línea de comando -->
+        <div class="terminal-bar d-flex align-items-center bg-dark rounded p-2 px-3 mb-3" style="border-left: 4px solid #0f0;">
+          <span class="me-2 text-success fw-bold">[admin@MikroTik] ></span>
+          <input type="text" id="comandoInput" class="form-control bg-black text-light border-0" placeholder="/interface print" style="font-family: monospace;">
+        </div>
+
+        <!-- Botón de ejecutar -->
+        <button class="btn btn-success btn-sm mb-3 px-4" onclick="ejecutarComando()">
+          <i class="bi bi-play-fill me-1"></i> Ejecutar
+        </button>
+
+        <!-- Área de respuesta -->
+        <pre id="salidaTerminal" class="terminal-output bg-dark text-success rounded p-3 mb-0" style="font-family: monospace; font-size: 0.95rem; max-height: 350px; overflow-y: auto; border-left: 4px solid #198754;">
+$ Esperando comando...
+        </pre>
+
       </div>
     </div>
   </div>
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"></script>
+
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -302,17 +329,47 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 let terminalId = null;
+let historialComandos = [];
+let indiceHistorial = -1;
+
 function abrirTerminal(id) {
   terminalId = id;
   document.getElementById('comandoInput').value = '';
-  document.getElementById('salidaTerminal').textContent = '';
+  document.getElementById('salidaTerminal').textContent = '$ Esperando comando...';
+
+  // Cargar historial desde localStorage
+  const guardado = localStorage.getItem(`terminal_mikrotik_${id}`);
+  historialComandos = guardado ? JSON.parse(guardado) : [];
+  indiceHistorial = historialComandos.length;
+
   const modal = new bootstrap.Modal(document.getElementById('modalTerminal'));
   modal.show();
 }
 
+
 function ejecutarComando() {
-  const comando = document.getElementById('comandoInput').value;
-  if (!comando) return alert("Escribe un comando MikroTik");
+
+  
+  const comando = document.getElementById('comandoInput').value.trim();
+  const salida = document.getElementById('salidaTerminal');
+  const overlay = document.getElementById('loadingTerminalOverlay');
+  const boton = document.querySelector('#modalTerminal button.btn-success');
+
+  if (!comando) {
+    alert("Escribe un comando MikroTik");
+    return;
+  }
+
+  // Guardar en historial si no es duplicado
+  if (historialComandos[historialComandos.length - 1] !== comando) {
+    historialComandos.push(comando);
+    localStorage.setItem(`terminal_mikrotik_${terminalId}`, JSON.stringify(historialComandos));
+  }
+  indiceHistorial = historialComandos.length;
+
+  salida.textContent = '';
+  overlay.style.display = 'block';
+  boton.disabled = true;
 
   fetch('api/ejecutar_comando_terminal.php', {
     method: 'POST',
@@ -320,14 +377,42 @@ function ejecutarComando() {
     body: `id=${terminalId}&comando=${encodeURIComponent(comando)}`
   })
   .then(res => res.text())
-  .then(salida => {
-    document.getElementById('salidaTerminal').textContent = salida;
+  .then(response => {
+    salida.textContent = response || "Sin respuesta del MikroTik.";
+    salida.scrollTop = salida.scrollHeight; // ✅ auto scroll al final
   })
-  .catch(err => {
-    document.getElementById('salidaTerminal').textContent = 'Error de conexión o ejecución: ' + err;
+  .catch(error => {
+    salida.textContent = "Error de conexión o ejecución: " + error;
+  })
+  .finally(() => {
+    overlay.style.display = 'none';
+    boton.disabled = false;
   });
 }
 
+
+document.getElementById('comandoInput').addEventListener('keydown', function (e) {
+  if (!historialComandos.length) return;
+
+  if (e.key === 'ArrowUp') {
+    if (indiceHistorial > 0) {
+      indiceHistorial--;
+      this.value = historialComandos[indiceHistorial];
+      e.preventDefault();
+    }
+  }
+
+  if (e.key === 'ArrowDown') {
+    if (indiceHistorial < historialComandos.length - 1) {
+      indiceHistorial++;
+      this.value = historialComandos[indiceHistorial];
+    } else {
+      this.value = '';
+      indiceHistorial = historialComandos.length;
+    }
+    e.preventDefault();
+  }
+});
 
 </script>
 
