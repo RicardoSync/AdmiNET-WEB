@@ -31,6 +31,13 @@ $pagos = $conn->prepare("SELECT monto, fecha_pago, proximo_pago FROM pagos WHERE
 $pagos->execute([$id]);
 $ultimoPago = $pagos->fetch(PDO::FETCH_ASSOC);
 
+// Obtener apikey actual
+$stmtKey = $conn->prepare("SELECT apikey FROM clientes_apikeys WHERE id_cliente = ?");
+$stmtKey->execute([$id]);
+$clienteKey = $stmtKey->fetch(PDO::FETCH_ASSOC);
+$apikey = $clienteKey ? $clienteKey['apikey'] : '';
+
+
 function getIniciales($nombre) {
   $partes = explode(" ", $nombre);
   $iniciales = '';
@@ -90,6 +97,16 @@ function getIniciales($nombre) {
                   <label class="form-label">Teléfono</label>
                   <input type="text" name="telefono" class="form-control" value="<?= $cliente['telefono'] ?>">
                 </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">API Key de CallMeBot</label>
+                  <div class="input-group">
+                    <input type="text" name="apikey" id="apikey" class="form-control" value="<?= htmlspecialchars($apikey) ?>" placeholder="Ingresa tu API Key">
+                    <button class="btn btn-outline-success" type="button" onclick="probarAPIKey()">Probar</button>
+                  </div>
+                  <small id="mensajeApiKey" class="text-muted mt-1 d-block"></small>
+                </div>
+
               </div>
 
               <div class="row mb-3">
@@ -253,6 +270,38 @@ if (!ubicacionInput.value || !ubicacionInput.value.includes(",")) {
 
 
 </script>
+
+<script>
+function probarAPIKey() {
+  const telefono = document.querySelector('input[name="telefono"]').value.trim();
+  const apikey = document.getElementById('apikey').value.trim();
+  const mensajeApiKey = document.getElementById('mensajeApiKey');
+
+  mensajeApiKey.innerText = "Enviando prueba...";
+
+  fetch(`/ded/api/test_callmebot.php?phone=${telefono}&apikey=${apikey}`)
+    .then(res => res.text())
+  .then(data => {
+    if (data.toLowerCase().includes("message queued")) {
+      mensajeApiKey.innerText = "✅ Mensaje enviado correctamente.";
+      mensajeApiKey.classList.remove("text-danger");
+      mensajeApiKey.classList.add("text-success");
+    } else {
+      mensajeApiKey.innerText = "❌ Error: " + data.replace(/<[^>]*>?/gm, '');
+      mensajeApiKey.classList.remove("text-success");
+      mensajeApiKey.classList.add("text-danger");
+    }
+  })
+
+    .catch(err => {
+      mensajeApiKey.innerText = "❌ Error al conectar con el servidor.";
+      mensajeApiKey.classList.remove("text-success");
+      mensajeApiKey.classList.add("text-danger");
+    });
+}
+
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

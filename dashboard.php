@@ -21,7 +21,22 @@ $clientesSuspendidos = $conn->query("SELECT COUNT(*) FROM clientes WHERE estado 
 $clientesBloqueados = $conn->query("SELECT COUNT(*) FROM clientes WHERE estado = 'Bloqueado'")->fetchColumn();
 $clientesRetirados = $conn->query("SELECT COUNT(*) FROM clientes WHERE estado = 'Cancelado'")->fetchColumn();
 
-$facturasPendientes = $conn->query("SELECT COUNT(*) FROM pagos WHERE proximo_pago IS NOT NULL AND DATE(proximo_pago) < CURDATE()")->fetchColumn();
+$facturasPendientes = $conn->query("
+  SELECT COUNT(*) FROM (
+    SELECT c.id
+    FROM clientes c
+    LEFT JOIN (
+      SELECT id_cliente, MAX(fecha_pago) AS fecha_pago, MAX(proximo_pago) AS proximo_pago
+      FROM pagos
+      GROUP BY id_cliente
+    ) p ON c.id = p.id_cliente
+    WHERE c.estado IN ('Activo','Suspendido') 
+      AND p.proximo_pago IS NOT NULL 
+      AND DATE(p.proximo_pago) < CURDATE()
+  ) AS sub
+")->fetchColumn();
+
+
 $cobranzaDia = $conn->query("SELECT IFNULL(SUM(monto), 0) FROM pagos WHERE DATE(fecha_pago) = CURDATE()")->fetchColumn();
 $ticketsPendientes = $conn->query("SELECT COUNT(*) FROM tickets WHERE estado = 'Pendiente'")->fetchColumn();
 $instalacionesPendientes = $conn->query("SELECT COUNT(*) FROM instalaciones WHERE estado = 'Pendiente'")->fetchColumn();
@@ -151,12 +166,13 @@ for ($i = 1; $i <= 12; $i++) {
         </div>
     </div>
     <div class="col-md-3">
-        <div class="metric-box" style="border-top-color:#dc3545;">
+      <button type="button" class="metric-box w-100" style="border-top-color:#dc3545;" data-bs-toggle="modal" data-bs-target="#modalPagosPendientes">
         <i class="bi bi-receipt"></i>
         <strong>Pagos Pendientes</strong>
         <span><?= $facturasPendientes ?></span>
-        </div>
-    </div>
+      </button>
+</div>
+
     <div class="col-md-3">
         <div class="metric-box" style="border-top-color:#198754;">
         <i class="bi bi-cash-coin"></i>
@@ -488,6 +504,63 @@ function cerrarRegalo() {
   <?php include 'epic_hades.php'; ?>
 <?php endif; ?>
 
+<?php
+$clientesDeudores = $conn->query("
+  SELECT c.id, c.nombre, c.dia_corte, p.fecha_pago, p.proximo_pago
+  FROM clientes c
+  LEFT JOIN (
+    SELECT id_cliente, MAX(fecha_pago) AS fecha_pago, MAX(proximo_pago) AS proximo_pago
+    FROM pagos
+    GROUP BY id_cliente
+  ) p ON c.id = p.id_cliente
+  WHERE c.estado IN ('Activo','Suspendido') AND p.proximo_pago IS NOT NULL AND DATE(p.proximo_pago) < CURDATE()
+")->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<!-- Modal -->
+<div class="modal fade" id="modalPagosPendientes" tabindex="-1" aria-labelledby="modalPagosPendientesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="modalPagosPendientesLabel">Clientes con Pagos Pendientes</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <?php if (count($clientesDeudores) > 0): ?>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Último Pago</th>
+                <th>Próximo Pago</th>
+                <th>Día de Corte</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($clientesDeudores as $i => $cliente): ?>
+              <tr>
+                <td><?= $i + 1 ?></td>
+                <td><?= htmlspecialchars($cliente['nombre']) ?></td>
+                <td><?= $cliente['fecha_pago'] ?? 'N/A' ?></td>
+                <td class="text-danger"><?= $cliente['proximo_pago'] ?></td>
+                <td><?= $cliente['dia_corte'] ?></td>
+              </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+        <?php else: ?>
+        <p class="text-center text-muted">No hay clientes con pagos vencidos.</p>
+        <?php endif; ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

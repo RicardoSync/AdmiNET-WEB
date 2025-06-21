@@ -107,6 +107,22 @@ try {
     }
   }
 
+  $apikey = trim($_POST['apikey'] ?? '');
+
+  if (!empty($apikey)) {
+    $stmtCheck = $conn->prepare("SELECT id FROM clientes_apikeys WHERE id_cliente = ?");
+    $stmtCheck->execute([$id]);
+
+    if ($stmtCheck->fetch()) {
+      $stmtUpdate = $conn->prepare("UPDATE clientes_apikeys SET apikey = ? WHERE id_cliente = ?");
+      $stmtUpdate->execute([$apikey, $id]);
+    } else {
+      $stmtInsert = $conn->prepare("INSERT INTO clientes_apikeys (id_cliente, apikey) VALUES (?, ?)");
+      $stmtInsert->execute([$id, $apikey]);
+    }
+  }
+
+
   header("Location: ../clientes.php?msg=actualizado");
   exit;
 

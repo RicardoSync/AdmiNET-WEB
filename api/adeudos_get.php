@@ -1,4 +1,7 @@
 <?php
+header('Content-Type: application/json');
+
+
 session_start();
 if (!isset($_SESSION['usuario'])) {
   http_response_code(401);
